@@ -110,12 +110,16 @@ class NgcConnect:
         logger.info(f"Headers used: {self._headers}")
 
         # Construct the URL with query parameters
-        URLP = (url + "?")
-        URLP += f'description={self._payload.get("description", "")}&'
-        URLP += f'return_metadata={self._payload.get("return_metadata", "False")}&'
-        URLP += f'limit={self._payload.get("limit", "30")}&'
-        URLP += f'file_extension_include={self._payload.get("file_extension_include", "")}&'
-        URLP += f'return_images={self._payload.get("return_images", "True")}&'
+        from urllib.parse import urlencode
+
+        params = {
+            "description": self._payload.get("description", ""),
+            "return_metadata": self._payload.get("return_metadata", "False"),
+            "limit": self._payload.get("limit", "30"),
+            "file_extension_include": self._payload.get("file_extension_include", ""),
+            "return_images": self._payload.get("return_images", "True"),
+        }
+        URLP = f"{url}?{urlencode(params)}"
 
         try:
             async with aiohttp.ClientSession() as session:
