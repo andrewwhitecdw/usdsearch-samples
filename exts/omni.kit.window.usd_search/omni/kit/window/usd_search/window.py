@@ -164,6 +164,10 @@ class UsdSearchWindow(ui.Window):
 
         self._field_state = FieldState(self._query)
 
+        self._query_model.add_begin_edit_fn(self._on_begin_edit)
+        self._query_model.add_end_edit_fn(self._on_end_edit)
+        self._search_in_scene_model.add_value_changed_fn(self._on_search_in_scene_changed)
+
         # These are default parameters for USD Search API
         self._payload = {
             "description": None,
@@ -235,9 +239,6 @@ class UsdSearchWindow(ui.Window):
             self._search_in_scene_model.set_value(False)
             self.rebuild_ui()
 
-        self._query_model.add_begin_edit_fn(self._on_begin_edit)
-        self._query_model.add_end_edit_fn(self._on_end_edit)
-
         with self.frame:
             with ui.VStack():
                 with ui.HStack(height=22, spacing=0):
@@ -283,20 +284,6 @@ class UsdSearchWindow(ui.Window):
                                     # bounding_boxes = [item.get("bbox_dimension", None) for item in data]
                                 USDSearchImageWidget(query, self._service_url, images, usd_paths, status=self._status)
                     self._animate_widget = AnimateWindget(visible=False)
-
-        def on_search_in_scene_changed(model):
-            self._scene_url_field.visible = model.as_bool
-            if model.as_bool:
-                if not self._scene_url_model.as_string:
-                    usd_context = omni.usd.get_context()
-                    if usd_context and not usd_context.is_new_stage():
-                        self._scene_url_model.set_value(usd_context.get_stage_url())
-
-            if self._query_future and not self._query_future.done():
-                # If searching in progress, restart
-                self._query()
-
-        self._search_in_scene_model.add_value_changed_fn(on_search_in_scene_changed)
 
     def download_s3_asset(self, model):
         """Example of how one would download an S3 asset (unused)."""
@@ -381,6 +368,21 @@ class UsdSearchWindow(ui.Window):
     def get_visible(self):
         # Used by menuitem to set checked status.
         return self.visible
+
+    def _on_search_in_scene_changed(self, model):
+        if not hasattr(self, "_scene_url_field"):
+            return
+
+        self._scene_url_field.visible = model.as_bool
+        if model.as_bool:
+            if not self._scene_url_model.as_string:
+                usd_context = omni.usd.get_context()
+                if usd_context and not usd_context.is_new_stage():
+                    self._scene_url_model.set_value(usd_context.get_stage_url())
+
+        if self._query_future and not self._query_future.done():
+            # If searching in progress, restart
+            self._query()
 
     def _query(self):
         if self._query_future and not self._query_future.done():
