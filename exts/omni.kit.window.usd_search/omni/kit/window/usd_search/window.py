@@ -358,10 +358,17 @@ class UsdSearchWindow(ui.Window):
         data = await self._ngc_connect.send_api_request_async(self._service_url)
 
         self._search_models = []
+        if isinstance(data, dict) and "error" in data:
+            logger.error(data["error"])
+            return
+
         for bundle in data:
+            if not isinstance(bundle, dict):
+                continue
             # Log errors if found
-            if bundle == "error":
-                logger.error(data["error"])
+            if "error" in bundle:
+                logger.error(bundle["error"])
+                continue
             # Skip generation of thumbnail if image key is missing (for errors).
             if "image" not in bundle:
                 continue
