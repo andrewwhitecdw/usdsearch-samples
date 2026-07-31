@@ -35,7 +35,7 @@ class USDSearchImageWidget:
     Creates an image widget grid array for USD Search Results.
     """
     def __init__(
-        self, query: str, service_url, images: List[str], usd_paths: List[str], bounding_boxs: List[list] = [], status=None, *args, **kwargs
+        self, query: str, service_url, images: List[str], usd_paths: List[str], bounding_boxs: List[list] = None, status=None, *args, **kwargs
     ):
         self._frame = ui.Frame(*args, **kwargs)
         self._query = query
@@ -43,7 +43,7 @@ class USDSearchImageWidget:
         self._image_preview = None
         self._images = images
         self._usd_paths = usd_paths
-        self._bounding_boxs = bounding_boxs
+        self._bounding_boxs = bounding_boxs if bounding_boxs is not None else []
         self._selected_items = set()
         self._image_frames = {}
         self._status = status
