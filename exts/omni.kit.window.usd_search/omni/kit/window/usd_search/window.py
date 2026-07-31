@@ -22,8 +22,12 @@ import logging
 from typing import Optional
 
 import carb
+import omni.appwindow
 import omni.client
+import omni.kit.app
+import omni.kit.commands
 import omni.ui as ui
+import omni.usd
 
 from .style import WINDOW_STYLE
 
