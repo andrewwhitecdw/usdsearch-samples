@@ -370,7 +370,10 @@ class UsdSearchWindow(ui.Window):
         return self.visible
 
     def _on_search_in_scene_changed(self, model):
-        if not hasattr(self, "_scene_url_field"):
+        # _scene_url_field is created by _rebuild_ui_async, which runs after this
+        # callback is registered in __init__. Ignore early emissions to avoid
+        # an AttributeError before the UI is first built.
+        if getattr(self, "_scene_url_field", None) is None:
             return
 
         self._scene_url_field.visible = model.as_bool
