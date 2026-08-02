@@ -12,7 +12,7 @@ __all__ = ["USDSearchImageWidget"]
 
 import asyncio
 import logging
-from typing import List
+from typing import List, Optional
 
 import omni.ui as ui
 from omni.ui import color as cl
@@ -35,7 +35,7 @@ class USDSearchImageWidget:
     Creates an image widget grid array for USD Search Results.
     """
     def __init__(
-        self, query: str, service_url, images: List[str], usd_paths: List[str], bounding_boxs: List[list] = None, status=None, *args, **kwargs
+        self, query: str, service_url, images: List[str], usd_paths: List[str], bounding_boxs: Optional[List[list]] = None, status=None, *args, **kwargs
     ):
         self._frame = ui.Frame(*args, **kwargs)
         self._query = query
