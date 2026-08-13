@@ -57,7 +57,9 @@ class NgcConnect:
                         else:
                             logger.error(f"Authorization is required for URL request but no API key and failed to get token from {nucleus_server} with error {result}")
         else:
-            self._headers["Authorization"] = "Bearer {}".format(self._api_key)
+            api_key = self._api_key
+            if isinstance(api_key, str) and api_key.strip():
+                self._headers["Authorization"] = "Bearer {}".format(api_key)
 
     def set_payload(self, payload):
         self._payload = payload
