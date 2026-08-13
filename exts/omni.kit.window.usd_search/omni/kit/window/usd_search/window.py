@@ -9,7 +9,7 @@
 # its affiliates is strictly prohibited.
 
 
-from .utils.animate_widget import AnimateWindget
+from .utils.animate_widget import AnimateWidget
 from .utils.image_handler import ImageHandler
 from .utils.image_widget import USDSearchImageWidget
 from .utils.ngc_connect import NgcConnect
@@ -282,7 +282,7 @@ class UsdSearchWindow(ui.Window):
                                     # dont want to deal with bounding boxes for now
                                     # bounding_boxes = [item.get("bbox_dimension", None) for item in data]
                                 USDSearchImageWidget(query, self._service_url, images, usd_paths, status=self._status)
-                    self._animate_widget = AnimateWindget(visible=False)
+                    self._animate_widget = AnimateWidget(visible=False)
 
         def on_search_in_scene_changed(model):
             self._scene_url_field.visible = model.as_bool
