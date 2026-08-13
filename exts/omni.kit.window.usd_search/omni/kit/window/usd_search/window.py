@@ -54,6 +54,7 @@ class FieldState:
         self.edit = False
 
         self._image_path = None  # TODO: want some more general container for attachments
+        self._enter_was_pressed = False
 
     def __del__(self):
         """
@@ -96,6 +97,7 @@ class FieldState:
             self._loop_event = asyncio.Event()
 
             self._loop_task = asyncio.ensure_future(self._loop(self._loop_event))
+            self._enter_was_pressed = False
         elif not value and self._loop_task is not None:
             self._loop_event.set()
             self._loop_event = None
@@ -130,8 +132,10 @@ class FieldState:
             alt_down = is_key_down(KeyboardInput.LEFT_ALT) or is_key_down(KeyboardInput.RIGHT_ALT)
             ctrl_down = is_key_down(KeyboardInput.LEFT_CONTROL) or is_key_down(KeyboardInput.RIGHT_CONTROL)
 
-            if enter_pressed and not (shift_down or alt_down or ctrl_down):
+            if enter_pressed and not (shift_down or alt_down or ctrl_down) and not self._enter_was_pressed:
                 self.send_message_on_enter()
+
+            self._enter_was_pressed = enter_pressed
 
             if loop_event.is_set():
                 break
