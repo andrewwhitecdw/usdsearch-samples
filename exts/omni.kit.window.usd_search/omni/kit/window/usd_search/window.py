@@ -140,14 +140,14 @@ class FieldState:
 class UsdSearchWindow(ui.Window):
     """The class that represents the window"""
 
-    def __init__(self, title: str, search_models=[], **kwargs):
+    def __init__(self, title: str, search_models=None, **kwargs):
         super().__init__(title, **kwargs)
 
         self._settings = carb.settings.get_settings()
         # This setting is pulled from config/extension.toml
         settings_path = "exts/omni.kit.window.usd_search/host_url"
         self._service_url = self._settings.get(settings_path)
-        self._search_models = search_models
+        self._search_models = search_models if search_models is not None else []
 
         self._default_prompt = ""
         self._visibility_changed_listener = None
