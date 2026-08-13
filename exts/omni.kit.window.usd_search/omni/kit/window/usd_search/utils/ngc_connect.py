@@ -106,6 +106,7 @@ class NgcConnect:
         if not self._payload.get("description", None):
             return
 
+        self._is_proper_instance = "ai.api.nvidia.com" not in url.lower()
         await self.set_headers_async(url)
         logger.info(f"Headers used: {self._headers}")
 
