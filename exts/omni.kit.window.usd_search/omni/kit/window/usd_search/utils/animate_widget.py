@@ -26,9 +26,11 @@ class AnimateWindget():
     def visible(self, value: bool) -> None:
         self._frame.visible = value
         if value:
-            self._rotate_future = asyncio.ensure_future(self._rotate())
+            if self._rotate_future is None or self._rotate_future.done():
+                self._rotate_future = asyncio.ensure_future(self._rotate())
         elif self._rotate_future:
             self._rotate_future.cancel()
+            self._rotate_future = None
 
     def _build_ui(self) -> None:
         with ui.Frame() as self._frame:
