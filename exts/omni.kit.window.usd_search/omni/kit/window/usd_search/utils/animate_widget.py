@@ -8,7 +8,7 @@ from omni.ui import scene as sc
 from ..style import ICON_PATH
 
 
-class AnimateWindget():
+class AnimateWidget():
     def __init__(self, visible: bool = True):
         self._build_ui()
 
@@ -44,3 +44,7 @@ class AnimateWindget():
             angle[0] -= delta
             transform = sc.Matrix44.get_rotation_matrix(0, 0, angle[0])
             self._transform.transform = transform
+
+
+# Backward-compatible alias for the previous typo
+AnimateWindget = AnimateWidget
