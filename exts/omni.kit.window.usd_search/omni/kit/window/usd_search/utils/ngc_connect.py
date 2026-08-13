@@ -106,6 +106,20 @@ class NgcConnect:
         if not self._payload.get("description", None):
             return
 
+        self._is_proper_instance = "ai.api.nvidia.com" not in url.lower()
+
+        if self._api_key is None:
+            settings = self._settings.get("/exts/omni.kit.window.usd_search/nvidia_api_key")
+            if settings:
+                self._api_key = settings
+            elif not self._is_proper_instance:
+                # Get from NVIDIA_API_KEY environment variable
+                import os
+
+                self._api_key = os.environ.get("NVIDIA_API_KEY")
+                if self._api_key is None:
+                    logger.error("NVIDIA_API_KEY is required for URL request")
+
         await self.set_headers_async(url)
         logger.info(f"Headers used: {self._headers}")
 
