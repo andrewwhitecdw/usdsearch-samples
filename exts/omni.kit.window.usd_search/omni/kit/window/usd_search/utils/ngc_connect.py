@@ -83,13 +83,13 @@ class NgcConnect:
                     logger.error("NVIDIA_API_KEY is required for URL request")
 
         await self.set_headers_async(url)
-        self._payload = json.dumps(self._payload)
+        json_payload = json.dumps(self._payload)
         logger.info(f"Invoked URL: {url}")
-        logger.info(f"Payload used: {self._payload}")
+        logger.info(f"Payload used: {json_payload}")
 
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.post(url, headers=self._headers, data=self._payload) as response:
+                async with session.post(url, headers=self._headers, data=json_payload) as response:
                     response.raise_for_status()
                     result = await response.json()
                     filtered_result = self._process_json_data(result)
