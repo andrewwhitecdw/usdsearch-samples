@@ -313,6 +313,10 @@ class UsdSearchWindow(ui.Window):
 
     # reference usd file
     def on_click_image(self, model):
+        if not model or not getattr(model, "asset_url", None) or not getattr(model, "asset_name", None):
+            logger.warning("Skipping image click: missing asset metadata")
+            return
+
         logger.info(f"Pressed url: {model.asset_url}")
 
         # Create a Reference of the Props in the stage
