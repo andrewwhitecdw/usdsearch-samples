@@ -8,7 +8,7 @@ from omni.ui import scene as sc
 from ..style import ICON_PATH
 
 
-class AnimateWindget():
+class AnimateWidget():
     def __init__(self, visible: bool = True):
         self._build_ui()
 
