@@ -11,9 +11,11 @@
 __all__ = ["USDSearchImageWidget"]
 
 import asyncio
+import copy
 import logging
 from typing import List
 
+import omni.kit.app
 import omni.ui as ui
 from omni.ui import color as cl
 
@@ -142,11 +144,9 @@ class USDSearchImageWidget:
         ):
 
             if button == 0:  # Left click
-                import copy
                 _selections = copy.copy(self._selected_items)
 
                 async def __delay_unselect():
-                    import omni.kit.app
                     await omni.kit.app.get_app().next_update_async()
                     # Only deselect all if no selection changed
                     if self._selected_items == _selections:
